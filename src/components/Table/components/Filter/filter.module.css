@@ -1,0 +1,20 @@
+.filter {
+    margin: 25px auto;
+    /* margin-top: 10%; */
+    height: 50px;
+    /* color: #b2b7bf; */
+}
+
+input {
+    width: 560px;
+    padding: 12px 20px;
+    /* margin: 8px 0; */
+    /* box-sizing: border-box; */
+    /* border: 2px solid red; */
+    /* border-radius: 4px; */
+    background: #5a5c66;
+}
+
+::placeholder {
+    color: #b2b7bf;
+}

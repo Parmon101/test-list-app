@@ -1,14 +1,10 @@
 import styles from "./table.module.css";
 import * as React from "react";
 import plus from "../../assets/sortUp.svg";
-
-// type Props = {
-//     title?: string,
-// };
+import Filter from "./components/Filter/Filter";
 
 const axios = require("axios").default;
 
-// const Table: React.FC<Props> = () => {
 const Table = () => {
     const [post, setPosts] = React.useState([]);
     const [filteredData, setFilteredData] = React.useState(post);
@@ -64,10 +60,31 @@ const Table = () => {
                   })
               );
     };
+
+    const handleSearch = (event) => {
+        let value = event.target.value.toLowerCase();
+        let result = [];
+        console.log(value);
+        result = post.filter((data) => {
+            return data.title.search(value) != -1;
+        });
+        setFilteredData(result);
+    };
+
     React.useEffect(() => {}, [sort, post]);
 
     return (
         <>
+            {/* <Filter></Filter> */}
+            <div>
+                <div className={styles.filter}>
+                    <input
+                        type="Search"
+                        placeholder="Поиск"
+                        onChange={(event) => handleSearch(event)}
+                    />
+                </div>
+            </div>
             <table className={styles.table}>
                 <tbody>
                     <tr className={styles.tablehead}>
@@ -96,7 +113,7 @@ const Table = () => {
                             />
                         </th>
                     </tr>
-                    {post.map((res) => (
+                    {filteredData.map((res) => (
                         <tr className={styles.tabletext} key={res.id}>
                             <td className={styles.CollumnOne}>{res.id}</td>
                             <td className={styles.CollumnTwo}>{res.title}</td>
