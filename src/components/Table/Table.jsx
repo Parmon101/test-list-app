@@ -1,25 +1,36 @@
-import styles from "./table.module.scss";
+import styles from "./table.module.css";
 import * as React from "react";
 import arrow from "../../assets/sortUp.svg";
 import ReactPaginate from "react-paginate";
+import { Filter } from "./components/Filter/Filter";
 
 const axios = require("axios").default;
 
 const Table = () => {
-    const [post, setPosts] = React.useState([]);
-    const [filteredData, setFilteredData] = React.useState(post);
+    const [originData, setOriginData] = React.useState([]);
+    const [filteredData, setFilteredData] = React.useState([]);
 
     const [sort, setSort] = React.useState(false);
 
     React.useEffect(() => {
-        const getPost = async () => {
+        const getOrigin = async () => {
             await axios
-                // .get("https://jsonplaceholder.typicode.com/posts")
                 .get(
                     "https://jsonplaceholder.typicode.com/posts?_page=1&_limit=10"
                 )
                 .then((data) => {
-                    setPosts(data.data);
+                    setOriginData(data.data);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        };
+        const getPost = async () => {
+            await axios
+                .get(
+                    "https://jsonplaceholder.typicode.com/posts?_page=1&_limit=10"
+                )
+                .then((data) => {
                     setFilteredData(data.data);
                 })
                 .catch(function (error) {
@@ -27,6 +38,7 @@ const Table = () => {
                 });
         };
 
+        getOrigin();
         getPost();
     }, []);
 
@@ -78,7 +90,7 @@ const Table = () => {
     const handleSearch = (event) => {
         let value = event.target.value.toLowerCase();
         let result = [];
-        result = post.filter((data) => {
+        result = originData.filter((data) => {
             return data.title.search(value) != -1;
         });
         setFilteredData(result);
@@ -91,25 +103,13 @@ const Table = () => {
 
         setFilteredData(commentsFormServer);
     };
-
-    React.useEffect(() => {}, [sort, post]);
-
     return (
         <>
-            {/* <Filter></Filter> */}
-            <div>
-                <div className={styles.filter}>
-                    <input
-                        type="Search"
-                        placeholder="Поиск"
-                        onChange={(event) => handleSearch(event)}
-                    />
-                </div>
-            </div>
+            <Filter onChange={(event) => handleSearch(event)} />
             <table className={styles.table}>
                 <tbody>
                     <tr className={styles.tablehead}>
-                        <th className={styles.CollumnOne}>
+                        <th className={styles.CollumnId}>
                             ID
                             <img
                                 className={styles.sortUp}
@@ -117,7 +117,7 @@ const Table = () => {
                                 onClick={sortId}
                             />
                         </th>
-                        <th className={styles.CollumnTwo}>
+                        <th className={styles.CollumnTitle}>
                             Заголовок
                             <img
                                 className={styles.sortUp}
@@ -125,7 +125,7 @@ const Table = () => {
                                 onClick={sortText}
                             />
                         </th>
-                        <th className={styles.CollumnThree}>
+                        <th className={styles.CollumnBody}>
                             Описание
                             <img
                                 className={styles.sortUp}
@@ -136,9 +136,9 @@ const Table = () => {
                     </tr>
                     {filteredData.map((res) => (
                         <tr className={styles.tabletext} key={res.id}>
-                            <td className={styles.CollumnOne}>{res.id}</td>
-                            <td className={styles.CollumnTwo}>{res.title}</td>
-                            <td className={styles.CollumnThree}>{res.body}</td>
+                            <td className={styles.CollumnId}>{res.id}</td>
+                            <td className={styles.CollumnTitle}>{res.title}</td>
+                            <td className={styles.CollumnBody}>{res.body}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -153,11 +153,11 @@ const Table = () => {
                 containerClassName={"pagination justify-content-center"}
                 pageClassName={"page-item"}
                 pageLinkClassName={"page-link"}
-                previousClassName={"page-item"}
+                // previousClassName={"page-item"}
                 previousLinkClassName={"page-link"}
-                nextClassName={"page-item"}
+                // nextClassName={"page-item"}
                 nextLinkClassName={" page-link"}
-                breakClassName={"page-item"}
+                // breakClassName={"page-item"}
                 breakLinkClassName={"page-link"}
                 activeClassName={"active"}
             />
