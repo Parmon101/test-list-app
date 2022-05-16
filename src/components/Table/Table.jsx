@@ -1,6 +1,6 @@
-import styles from "./table.module.css";
+import styles from "./table.module.scss";
 import * as React from "react";
-import plus from "../../assets/sortUp.svg";
+import arrow from "../../assets/sortUp.svg";
 import ReactPaginate from "react-paginate";
 
 const axios = require("axios").default;
@@ -37,19 +37,18 @@ const Table = () => {
         return res.data;
     };
 
-    console.log(post);
     const sortId = () => {
         setSort((current) => !current);
         sort === false
-            ? setPosts(post.sort((a, b) => b.id - a.id))
-            : setPosts(post.sort((a, b) => a.id - b.id));
+            ? setFilteredData(filteredData.sort((a, b) => b.id - a.id))
+            : setFilteredData(filteredData.sort((a, b) => a.id - b.id));
     };
 
-    const sortTitle = () => {
+    const sortText = () => {
         setSort((current) => !current);
         sort === false
-            ? setPosts(
-                  post.sort(function (a, b) {
+            ? setFilteredData(
+                  filteredData.sort(function (a, b) {
                       const firstValue = a.title;
                       const secondValue = b.title;
                       if (firstValue < secondValue) {
@@ -61,8 +60,8 @@ const Table = () => {
                       return 0;
                   })
               )
-            : setPosts(
-                  post.sort(function (a, b) {
+            : setFilteredData(
+                  filteredData.sort(function (a, b) {
                       const firstValue = a.title;
                       const secondValue = b.title;
                       if (firstValue > secondValue) {
@@ -79,7 +78,6 @@ const Table = () => {
     const handleSearch = (event) => {
         let value = event.target.value.toLowerCase();
         let result = [];
-        console.log(value);
         result = post.filter((data) => {
             return data.title.search(value) != -1;
         });
@@ -87,8 +85,6 @@ const Table = () => {
     };
 
     const handlePageClick = async (data) => {
-        console.log(data.selected);
-
         let currentPage = data.selected + 1;
 
         const commentsFormServer = await currentPagePost(currentPage);
@@ -117,7 +113,7 @@ const Table = () => {
                             ID
                             <img
                                 className={styles.sortUp}
-                                src={plus}
+                                src={arrow}
                                 onClick={sortId}
                             />
                         </th>
@@ -125,16 +121,16 @@ const Table = () => {
                             Заголовок
                             <img
                                 className={styles.sortUp}
-                                src={plus}
-                                onClick={sortTitle}
+                                src={arrow}
+                                onClick={sortText}
                             />
                         </th>
                         <th className={styles.CollumnThree}>
                             Описание
                             <img
                                 className={styles.sortUp}
-                                src={plus}
-                                onClick={sortTitle}
+                                src={arrow}
+                                onClick={sortText}
                             />
                         </th>
                     </tr>
@@ -151,7 +147,7 @@ const Table = () => {
                 previousLabel={"Назад"}
                 nextLabel={"Вперед"}
                 breakLabel={"..."}
-                pageCount={11}
+                pageCount={10}
                 marginPagesDisplayed={5}
                 onPageChange={handlePageClick}
                 containerClassName={"pagination justify-content-center"}
