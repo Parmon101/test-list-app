@@ -1,7 +1,7 @@
 import styles from "./table.module.css";
 import * as React from "react";
 import plus from "../../assets/sortUp.svg";
-import Filter from "./components/Filter/Filter";
+import ReactPaginate from "react-paginate";
 
 const axios = require("axios").default;
 
@@ -12,17 +12,32 @@ const Table = () => {
     const [sort, setSort] = React.useState(false);
 
     React.useEffect(() => {
-        axios
-            .get("https://jsonplaceholder.typicode.com/posts")
-            .then((data) => {
-                setPosts(data.data);
-                setFilteredData(data.data);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        const getPost = async () => {
+            await axios
+                // .get("https://jsonplaceholder.typicode.com/posts")
+                .get(
+                    "https://jsonplaceholder.typicode.com/posts?_page=1&_limit=10"
+                )
+                .then((data) => {
+                    setPosts(data.data);
+                    setFilteredData(data.data);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        };
+
+        getPost();
     }, []);
 
+    const currentPagePost = async (currentPage) => {
+        const res = await axios.get(
+            `https://jsonplaceholder.typicode.com/posts?_page=${currentPage}&_limit=10`
+        );
+        return res.data;
+    };
+
+    console.log(post);
     const sortId = () => {
         setSort((current) => !current);
         sort === false
@@ -69,6 +84,16 @@ const Table = () => {
             return data.title.search(value) != -1;
         });
         setFilteredData(result);
+    };
+
+    const handlePageClick = async (data) => {
+        console.log(data.selected);
+
+        let currentPage = data.selected + 1;
+
+        const commentsFormServer = await currentPagePost(currentPage);
+
+        setFilteredData(commentsFormServer);
     };
 
     React.useEffect(() => {}, [sort, post]);
@@ -122,6 +147,24 @@ const Table = () => {
                     ))}
                 </tbody>
             </table>
+            <ReactPaginate
+                previousLabel={"Назад"}
+                nextLabel={"Вперед"}
+                breakLabel={"..."}
+                pageCount={11}
+                marginPagesDisplayed={5}
+                onPageChange={handlePageClick}
+                containerClassName={"pagination justify-content-center"}
+                pageClassName={"page-item"}
+                pageLinkClassName={"page-link"}
+                previousClassName={"page-item"}
+                previousLinkClassName={"page-link"}
+                nextClassName={"page-item"}
+                nextLinkClassName={" page-link"}
+                breakClassName={"page-item"}
+                breakLinkClassName={"page-link"}
+                activeClassName={"active"}
+            />
         </>
     );
 };

@@ -48,9 +48,9 @@
     height: 54px;
 }
 
-td {
+tr > td {
     color: #474955;
-    border: 1px solid black;
+    border: 1px solid #e3e6ec;
 }
 .CollumnOne {
     width: 10%;
@@ -87,7 +87,7 @@ td {
 }
 
 input {
-    width: 560px;
+    width: 50%;
     padding: 12px 20px;
     /* margin: 8px 0; */
     /* box-sizing: border-box; */
