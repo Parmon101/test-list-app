@@ -77,3 +77,30 @@ tr > td {
     /* transition: transform 0.3s; */
     transform: rotate(180deg);
 }
+
+.numberPage {
+    border: none;
+    background-color: #fff; /* Green */
+    margin: 0 5px;
+
+    font-family: "Roboto";
+    font-size: 24px;
+
+    color: #474955;
+}
+
+.numberPageCurrect {
+    border: none;
+    background-color: #fff; /* Green */
+    margin: 0 5px;
+
+    font-family: "Roboto";
+    font-size: 24px;
+
+    color: red;
+}
+
+.blogButtons {
+    text-align: center;
+    margin-top: 10px;
+}

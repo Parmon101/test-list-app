@@ -9,14 +9,31 @@ const Table = () => {
     const [originData, setOriginData] = React.useState([]);
     const [filteredData, setFilteredData] = React.useState([]);
 
+    // ------------------- start pagination ---------------------------
+
+    const [number, setNumber] = React.useState(1);
+    const [postPerPage] = React.useState(10);
+
+    const lastPost = number * postPerPage;
+    const firstPost = lastPost - postPerPage;
+    const currentPost = filteredData.slice(firstPost, lastPost);
+    const pageNumber = [];
+
+    for (let i = 1; i <= Math.ceil(filteredData.length / postPerPage); i++) {
+        pageNumber.push(i);
+    }
+    const ChangePage = (pageNumber) => {
+        setNumber(pageNumber);
+    };
+
+    // ------------------- finish pagination ---------------------------
+
     const [sort, setSort] = React.useState(false);
 
     React.useEffect(() => {
         const getOrigin = async () => {
             await axios
-                .get(
-                    "https://jsonplaceholder.typicode.com/posts?_page=1&_limit=10"
-                )
+                .get("https://jsonplaceholder.typicode.com/posts")
                 .then((data) => {
                     setOriginData(data.data);
                 })
@@ -26,9 +43,7 @@ const Table = () => {
         };
         const getPost = async () => {
             await axios
-                .get(
-                    "https://jsonplaceholder.typicode.com/posts?_page=1&_limit=10"
-                )
+                .get("https://jsonplaceholder.typicode.com/posts")
                 .then((data) => {
                     setFilteredData(data.data);
                 })
@@ -119,7 +134,7 @@ const Table = () => {
                             />
                         </th>
                     </tr>
-                    {filteredData.map((res) => (
+                    {currentPost.map((res) => (
                         <tr className={styles.tabletext} key={res.id}>
                             <td className={styles.CollumnId}>{res.id}</td>
                             <td className={styles.CollumnTitle}>{res.title}</td>
@@ -128,6 +143,39 @@ const Table = () => {
                     ))}
                 </tbody>
             </table>
+
+            <div className={styles.blogButtons}>
+                <button
+                    className={styles.numberPage}
+                    onClick={() => setNumber(number - 1)}
+                >
+                    Назад
+                </button>
+
+                {pageNumber.map((Elem) => {
+                    return (
+                        <>
+                            <button
+                                key={Elem}
+                                className={
+                                    Elem !== number
+                                        ? styles.numberPage
+                                        : styles.numberPageCurrect
+                                }
+                                onClick={() => ChangePage(Elem)}
+                            >
+                                {Elem}
+                            </button>
+                        </>
+                    );
+                })}
+                <button
+                    className={styles.numberPage}
+                    onClick={() => setNumber(number + 1)}
+                >
+                    Далее
+                </button>
+            </div>
         </>
     );
 };
