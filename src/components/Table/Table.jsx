@@ -41,13 +41,6 @@ const Table = () => {
         getPost();
     }, []);
 
-    const currentPagePost = async (currentPage) => {
-        const res = await axios.get(
-            `https://jsonplaceholder.typicode.com/posts?_page=${currentPage}&_limit=10`
-        );
-        return res.data;
-    };
-
     const sortId = () => {
         setSort((current) => !current);
         sort === false
