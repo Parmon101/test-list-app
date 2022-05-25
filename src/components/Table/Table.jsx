@@ -1,7 +1,6 @@
 import styles from "./table.module.css";
 import * as React from "react";
 import arrow from "../../assets/sortUp.svg";
-import ReactPaginate from "react-paginate";
 import { Filter } from "./components/Filter/Filter";
 
 const axios = require("axios").default;
@@ -96,13 +95,6 @@ const Table = () => {
         setFilteredData(result);
     };
 
-    const handlePageClick = async (data) => {
-        let currentPage = data.selected + 1;
-
-        const commentsFormServer = await currentPagePost(currentPage);
-
-        setFilteredData(commentsFormServer);
-    };
     return (
         <>
             <Filter onChange={(event) => handleSearch(event)} />
@@ -143,24 +135,6 @@ const Table = () => {
                     ))}
                 </tbody>
             </table>
-            <ReactPaginate
-                previousLabel={"Назад"}
-                nextLabel={"Вперед"}
-                breakLabel={"..."}
-                pageCount={10}
-                marginPagesDisplayed={5}
-                onPageChange={handlePageClick}
-                containerClassName={"pagination justify-content-center"}
-                pageClassName={"page-item"}
-                pageLinkClassName={"page-link"}
-                // previousClassName={"page-item"}
-                previousLinkClassName={"page-link"}
-                // nextClassName={"page-item"}
-                nextLinkClassName={" page-link"}
-                // breakClassName={"page-item"}
-                breakLinkClassName={"page-link"}
-                activeClassName={"active"}
-            />
         </>
     );
 };
