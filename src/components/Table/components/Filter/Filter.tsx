@@ -8,7 +8,11 @@ type Props = {
 export const Filter: React.FC<Props> = ({ onChange }) => {
     return (
         <div className={styles.filter}>
-            <input type="Search" placeholder="Поиск" onChange={onChange} />
+            <input
+                type="Search"
+                placeholder="Поиск по Заголовку"
+                onChange={onChange}
+            />
         </div>
     );
 };
