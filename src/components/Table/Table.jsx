@@ -157,11 +157,11 @@ const Table = () => {
                         <>
                             <button
                                 key={Elem}
-                                className={
-                                    Elem !== number
-                                        ? styles.numberPage
-                                        : styles.numberPageCurrect
-                                }
+                                style={{
+                                    color:
+                                        Elem === number ? "green" : "#474955",
+                                }}
+                                className={styles.numberPage}
                                 onClick={() => ChangePage(Elem)}
                             >
                                 {Elem}
